@@ -45,3 +45,5 @@ Route::get('/', function (Request $request) {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('resource', 'ResourcesController');
