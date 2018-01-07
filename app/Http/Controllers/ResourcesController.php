@@ -62,8 +62,8 @@ class ResourcesController extends Controller
                 "updated_at" => \Carbon\Carbon::now(),  # \Datetime()
                 ]
             );
-            return redirect('/');
         }
+        return redirect('/resource/'.$resource->title);
     }
 
     /**
@@ -75,12 +75,15 @@ class ResourcesController extends Controller
     public function show($title)
     {
         $searchTerm = DB::table('searches')->where('query', '* '.$title)->first();
-        $accesses = $searchTerm->accesses;
+        if (isset($searchTerm)) $accesses = $searchTerm->accesses;
         $resource = Resource::where('title', '=', $title)->first();
-        return view('resources.show')
-            ->with('title', $resource->title)
-            ->with('body', $resource->body)
-            ->with('accesses', $accesses);    
+        if (isset($resource)){
+            return view('resources.show')
+                ->with('title', $resource->title)
+                ->with('body', $resource->body)
+                ->with('accesses', $accesses);    
+        }
+        else return "resource not found";
     }
 
     /**
@@ -123,5 +126,6 @@ class ResourcesController extends Controller
         DB::table('searches')
           ->where('query', '=', "* ".$title)
           ->delete();
+        return redirect('/');
     }
 }

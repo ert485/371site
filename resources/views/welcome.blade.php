@@ -112,17 +112,33 @@
             </div>
                 <br>
                 <div class="content">
-                    <form id="search" action="" method="get">
-                        <input list="history" name="search">
-                        <datalist id="history">
-                            @if (isset($history_list))
-                                @foreach ($history_list as $history)
-                                    <option value="{{$history->query}}">
-                                @endforeach
-                            @endif
-                        </datalist>
-                        <input type="submit" value="Search">
-                    </form>  
+                    <table style="display: inline-block;">
+                        <tr>
+                            <td>
+                        <form id="search" action="" method="get">
+                            <input list="history" name="search">
+                            <datalist id="history">
+                                @if (isset($history_list))
+                                    @foreach ($history_list as $history)
+                                        <option value="{{$history->query}}">
+                                    @endforeach
+                                @endif
+                            </datalist>
+                            <input type="submit" value="Search">
+                        </form>  
+                        </td>
+                        <td>
+                        <!--
+                        <form id="newResource" action="resource/create" method="get">
+                            <input type="submit" value="Create new resource">
+                        </form>
+                        -->
+                        <!-- 
+                        <a href="resource/create">Create new resource</a>
+                        -->
+                        </td>
+                        </tr>
+                    </table
                     <table style="display: inline-block;"><tr>
                     <td> <div id="popup" class="popup" style="display: none">Search history is shared with everyone</div></td></tr></table>
                   
