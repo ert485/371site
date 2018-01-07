@@ -160,5 +160,9 @@
                 @endif
             </div>
         </div>
+        <div class="flex-center">
+            <a href="resource/create">Create new resource</a>
+        </div>
+        <div>.</div><div>.</div>
     </body>
 </html>

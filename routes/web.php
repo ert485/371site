@@ -22,13 +22,15 @@ Route::get('/', function (Request $request) {
             $accesses = $found->accesses;
         }
         else {
-            DB::table('searches')->insert(
-                ['query' => $query,
-                "created_at" =>  \Carbon\Carbon::now(), 
-                "updated_at" => \Carbon\Carbon::now(),
-                ]
-            );
-            $accesses = 0;
+            if($query[0]!="*"){
+                DB::table('searches')->insert(
+                    ['query' => $query,
+                    "created_at" =>  \Carbon\Carbon::now(), 
+                    "updated_at" => \Carbon\Carbon::now(),
+                    ]
+                );
+                $accesses = 0;
+            }
         }
         if($query[0]=='*') {
             return redirect('resource/'.ltrim($query,"* "));
