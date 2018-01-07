@@ -104,7 +104,7 @@
                                 <input list="history" name="search">
                                 <datalist id="history">
                                     @foreach ($history_list as $history)
-                                    <option value="{{$history}}">
+                                    <option value="{{$history->query}}">
                                     @endforeach
                                 </datalist>
                                 <input type="submit" value="Search">

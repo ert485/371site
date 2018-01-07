@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,11 +12,26 @@
 |
 */
 
-Route::get('/', function () {
-    $history = array();
-    array_push($history,"test");
+Route::get('/', function (Request $request) {
+    $query = $request->search;
+    if(isset($query)){
+        $found = DB::table('searches')->where('query', $query)->first();
+        if(isset($found->query)) {
+            // it was a term that was searched before
+        }
+        else {
+            DB::table('searches')->insert(
+                ['query' => $query,
+                "created_at" =>  \Carbon\Carbon::now(), # \Datetime()
+                "updated_at" => \Carbon\Carbon::now(),  # \Datetime()
+                ]
+            );
+        }
+
+    }
+    $searches = DB::table('searches')->get();
     return view('welcome')
-        ->with('history_list', $history);
+        ->with('history_list', $searches);
 });
 
 Auth::routes();
