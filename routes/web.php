@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 
 Route::get('/', function (Request $request) {
     $query = $request->search;
+    if($query[0]=='*') return redirect('resource/'.ltrim($query,"* "));
     if(isset($query)){
         $found = DB::table('searches')->where('query', $query)->first();
         if(isset($found->query)) {
