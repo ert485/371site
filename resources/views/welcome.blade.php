@@ -75,6 +75,12 @@
                 font-weight:700;
                 color: #993333;
             }
+            
+            .accesses {
+                font-size: 16px;
+                font-weight:700;
+                color: #339933;
+            }
         </style>
     </head>
     <body>
@@ -103,35 +109,40 @@
                     <a href="#">Demos</a>
                     <a href="#">About The Team</a>
                     -->
+            </div>
+                <br>
+                <div class="content">
+                    <form id="search" action="" method="get">
+                        <input list="history" name="search">
+                        <datalist id="history">
+                            @if (isset($history_list))
+                                @foreach ($history_list as $history)
+                                    <option value="{{$history->query}}">
+                                @endforeach
+                            @endif
+                        </datalist>
+                        <input type="submit" value="Search">
+                    </form>  
+                    <table style="display: inline-block;"><tr>
+                    <td> <div id="popup" class="popup" style="display: none">Search history is shared with everyone</div></td></tr></table>
+                  
+                   <script>
+                        var e = document.getElementById('search');
+                        e.onmouseover = function() {
+                          document.getElementById('popup').style.display = 'block';
+                        }
+                        e.onmouseout = function() {
+                          document.getElementById('popup').style.display = 'none';
+                        }
+                   </script>
                 </div>
-                    <br>
-                        <div class="content">
-                            <form id="search" action="" method="get">
-                                <input list="history" name="search">
-                                <datalist id="history">
-                                    @if (isset($history_list))
-                                        @foreach ($history_list as $history)
-                                            <option value="{{$history->query}}">
-                                        @endforeach
-                                    @endif
-                                </datalist>
-                                <input type="submit" value="Search">
-                            </form>  
-                            <table style="display: inline-block;"><tr>
-                            <td> <div id="popup" class="popup" style="display: none">Search history is shared with everyone</div></td></tr></table>
-                          
-                           <script>
-                                var e = document.getElementById('search');
-                                e.onmouseover = function() {
-                                  document.getElementById('popup').style.display = 'block';
-                                }
-                                e.onmouseout = function() {
-                                  document.getElementById('popup').style.display = 'none';
-                                }
-                           </script>
-                </div>
+                @if (isset($accesses) && isset($redirect))
+                    <div id='accesses' class='accesses'>
+                        Redirecting to {{$redirect}} <br>
+                        This search was accessed {{$accesses}} times.
+                    </div>
+                @endif
             </div>
         </div>
-
     </body>
 </html>

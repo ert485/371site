@@ -19,6 +19,8 @@ Route::get('/', function (Request $request) {
         $found = DB::table('searches')->where('query', $query)->first();
         if(isset($found->query)) {
             // it was a term that was searched before
+            DB::table('searches')->increment('accesses');
+            $accesses = $found->accesses;
         }
         else {
             DB::table('searches')->insert(
@@ -27,10 +29,12 @@ Route::get('/', function (Request $request) {
                 "updated_at" => \Carbon\Carbon::now(),  # \Datetime()
                 ]
             );
+            $accesses = 0;
         }
         $redirect = "http://google.com/search?query=".$query;
         return view('welcome')
             ->with('redirect', $redirect)
+            ->with('accesses', $accesses)
             ->with('history_list', $searches);
     }
     return view('welcome')

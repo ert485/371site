@@ -15,6 +15,7 @@ class CreateSearchesTable extends Migration
     {
         Schema::create('searches', function (Blueprint $table) {
             $table->string('query')->unique();
+            $table->integer('accesses')->default('0');
             $table->timestamps();
         });
     }
