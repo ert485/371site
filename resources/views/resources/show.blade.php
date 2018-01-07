@@ -7,9 +7,16 @@
             <div class="panel panel-default">
                 <div class="panel-heading">{{$title}}</div>
                 <div class="panel-body">
-                    <br>
                     {!! $body !!}
                 </div>
+                @if (isset($accesses)) 
+                    <div class="panel-footer">
+                        {!! Form::open(array('url' => 'resource/'.$title.'/edit', 'method' => 'GET')) !!}
+                            {{Form::submit('Edit', ['class' => 'btn btn-primary'])}}
+                        {!! Form::close() !!}
+                        Views: {{$accesses}}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 
 Route::get('/', function (Request $request) {
     $query = $request->search;
-    if($query[0]=='*') return redirect('resource/'.ltrim($query,"* "));
     if(isset($query)){
         $found = DB::table('searches')->where('query', $query)->first();
         if(isset($found->query)) {
@@ -25,11 +24,14 @@ Route::get('/', function (Request $request) {
         else {
             DB::table('searches')->insert(
                 ['query' => $query,
-                "created_at" =>  \Carbon\Carbon::now(), # \Datetime()
-                "updated_at" => \Carbon\Carbon::now(),  # \Datetime()
+                "created_at" =>  \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now(),
                 ]
             );
             $accesses = 0;
+        }
+        if($query[0]=='*') {
+            return redirect('resource/'.ltrim($query,"* "));
         }
         $searches = DB::table('searches')->get();
         $redirect = "http://google.com/search?query=".$query;

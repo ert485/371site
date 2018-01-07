@@ -41,22 +41,29 @@ class ResourcesController extends Controller
             'body' => 'required',
         ]);
         
-        $resource = new Resource();
-        $resource->setValues(            
-            $request->input('title'),
-            $request->input('body')
+        $resource = Resource::where('title', '=', $request->title)->first();
+        if(isset($resource)){
+            DB::table('searches')->increment('accesses');
+            Resource::where('title','=',$request->title)
+                ->update(['body' => $request->body]);
+        }
+        else{
+            $resource = new Resource();
+            $resource->setValues(            
+                $request->input('title'),
+                $request->input('body')
+                );
+            $resource->save();  
+            
+            //add to search dropdown
+            DB::table('searches')->insert(
+                ['query' => '* '.$resource->title,
+                "created_at" =>  \Carbon\Carbon::now(), # \Datetime()
+                "updated_at" => \Carbon\Carbon::now(),  # \Datetime()
+                ]
             );
-        $resource->save();  
-        
-        //add to search dropdown
-        DB::table('searches')->insert(
-            ['query' => '* '.$resource->title,
-            "created_at" =>  \Carbon\Carbon::now(), # \Datetime()
-            "updated_at" => \Carbon\Carbon::now(),  # \Datetime()
-            ]
-        );
-        return redirect('/');
-
+            return redirect('/');
+        }
     }
 
     /**
@@ -67,10 +74,13 @@ class ResourcesController extends Controller
      */
     public function show($title)
     {
+        $searchTerm = DB::table('searches')->where('query', '* '.$title)->first();
+        $accesses = $searchTerm->accesses;
         $resource = Resource::where('title', '=', $title)->first();
         return view('resources.show')
             ->with('title', $resource->title)
-            ->with('body', $resource->body);    
+            ->with('body', $resource->body)
+            ->with('accesses', $accesses);    
     }
 
     /**
@@ -79,31 +89,39 @@ class ResourcesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($title)
     {
-        //
+        $resource = Resource::where('title', '=', $title)->first();
+        return view('resources.edit')
+            ->with('title', $resource->title)
+            ->with('body', $resource->body);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        // caught by store
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $title
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($title)
     {
-        //
+        //$resource = Resource::where('title', '=', $title)->first()->delete();
+        DB::table('resources')
+          ->where('title', '=', $title)
+          ->delete();
+        DB::table('searches')
+          ->where('query', '=', "* ".$title)
+          ->delete();
     }
 }

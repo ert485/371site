@@ -138,7 +138,7 @@
                 </div>
                 @if (isset($accesses) && isset($redirect))
                     <div id='accesses' class='accesses'>
-                        Redirecting to {{$redirect}} <br>
+                        Opening new tab with {{$redirect}} <br>
                         This search was accessed {{$accesses}} times.
                     </div>
                 @endif
