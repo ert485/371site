@@ -4,6 +4,12 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        @if (isset($redirect))
+            <script type="text/javascript">
+                window.open( "{{$redirect}}" )
+            </script>
+        @endif
 
         <title>Laravel</title>
 
@@ -103,9 +109,11 @@
                             <form id="search" action="" method="get">
                                 <input list="history" name="search">
                                 <datalist id="history">
-                                    @foreach ($history_list as $history)
-                                    <option value="{{$history->query}}">
-                                    @endforeach
+                                    @if (isset($history_list))
+                                        @foreach ($history_list as $history)
+                                            <option value="{{$history->query}}">
+                                        @endforeach
+                                    @endif
                                 </datalist>
                                 <input type="submit" value="Search">
                             </form>  

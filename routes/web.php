@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function (Request $request) {
+    $searches = DB::table('searches')->get();
     $query = $request->search;
     if(isset($query)){
         $found = DB::table('searches')->where('query', $query)->first();
@@ -27,9 +28,11 @@ Route::get('/', function (Request $request) {
                 ]
             );
         }
-
+        $redirect = "http://google.com/search?query=".$query;
+        return view('welcome')
+            ->with('redirect', $redirect)
+            ->with('history_list', $searches);
     }
-    $searches = DB::table('searches')->get();
     return view('welcome')
         ->with('history_list', $searches);
 });
